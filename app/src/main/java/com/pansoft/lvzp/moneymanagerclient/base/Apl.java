@@ -2,6 +2,9 @@ package com.pansoft.lvzp.moneymanagerclient.base;
 
 import android.app.Application;
 
+import com.lcodecore.tkrefreshlayout.TwinklingRefreshLayout;
+import com.lcodecore.tkrefreshlayout.footer.BallPulseView;
+import com.lcodecore.tkrefreshlayout.header.progresslayout.ProgressLayout;
 import com.pansoft.lvzp.moneymanagerclient.R;
 
 /**
@@ -18,6 +21,8 @@ public class Apl extends Application {
     public void onCreate() {
         super.onCreate();
         sInstance = this;
+        TwinklingRefreshLayout.setDefaultHeader(ProgressLayout.class.getName());
+        TwinklingRefreshLayout.setDefaultFooter(BallPulseView.class.getName());
     }
 
     public static Apl getInstance() {

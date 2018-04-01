@@ -6,8 +6,10 @@ import android.databinding.DataBindingUtil;
 import android.databinding.ViewDataBinding;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.text.TextUtils;
+import android.view.MenuItem;
 import android.widget.Toast;
 
 /**
@@ -37,6 +39,22 @@ public abstract class BaseActivity<D extends ViewDataBinding> extends AppCompatA
         mDataBinding = DataBindingUtil.setContentView(this, getLayoutId());
     }
 
+    public void openBackIcon(){
+        ActionBar supportActionBar = getSupportActionBar();
+        if (supportActionBar != null) {
+            supportActionBar.setDisplayHomeAsUpEnabled(true);
+        }
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case android.R.id.home:
+                onBackPressed();
+                return true;
+        }
+        return super.onOptionsItemSelected(item);
+    }
     public void showToast(final String msg) {
         runOnUiThread(new Runnable() {
             @Override

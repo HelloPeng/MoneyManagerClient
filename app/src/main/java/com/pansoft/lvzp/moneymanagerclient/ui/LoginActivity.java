@@ -103,7 +103,7 @@ public class LoginActivity extends BaseActivity<ActivityLoginBinding> {
                     showToast(getString(R.string.edit_hint_input_password));
                     return;
                 }
-                Map<String, String> params = new ArrayMap<>();
+                Map<String, Object> params = new ArrayMap<>();
                 params.put("username", username);
                 params.put("password", password);
                 showProgressDialog();

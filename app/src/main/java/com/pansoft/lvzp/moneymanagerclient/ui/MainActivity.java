@@ -38,6 +38,7 @@ public class MainActivity extends BaseActivity<ActivityMainBinding> {
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.ll_menu_user_manager:
+                UserManagerActivity.actionStart(mContext);
                 break;
             case R.id.ll_menu_trade_info:
                 break;
@@ -56,7 +57,7 @@ public class MainActivity extends BaseActivity<ActivityMainBinding> {
                         .setPositiveButton("确认", new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
-                                SharedPreferencesUtils.setParam(mContext, Constant.USER_LOGIN_OID, null);
+                                SharedPreferencesUtils.setParam(mContext, Constant.USER_LOGIN_OID, "");
                                 LoginActivity.actionStart(mContext);
                                 finish();
                             }

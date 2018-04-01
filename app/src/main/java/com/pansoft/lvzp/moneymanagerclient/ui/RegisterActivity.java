@@ -32,10 +32,7 @@ public class RegisterActivity extends BaseActivity<ActivityRegisterBinding> {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        ActionBar supportActionBar = getSupportActionBar();
-        if (supportActionBar != null) {
-            supportActionBar.setDisplayHomeAsUpEnabled(true);
-        }
+        openBackIcon();
     }
 
     @Override
@@ -61,9 +58,9 @@ public class RegisterActivity extends BaseActivity<ActivityRegisterBinding> {
                     showToast(getString(R.string.input_password_difference));
                     return;
                 }
-                Map<String,String> params = new ArrayMap<>();
-                params.put("username",username);
-                params.put("password",password);
+                Map<String, Object> params = new ArrayMap<>();
+                params.put("username", username);
+                params.put("password", password);
                 showProgressDialog();
                 OkHttpClientManager.getInstance().asyncPost(ApiUrl.REGISTER, params, new OkHttpClientManager.HttpResultCallback<Boolean>() {
                     @Override
@@ -82,13 +79,4 @@ public class RegisterActivity extends BaseActivity<ActivityRegisterBinding> {
         }
     }
 
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()) {
-            case android.R.id.home:
-                onBackPressed();
-                return true;
-        }
-        return super.onOptionsItemSelected(item);
-    }
 }

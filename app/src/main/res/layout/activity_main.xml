@@ -30,6 +30,7 @@
 
             <LinearLayout
                 android:id="@+id/ll_menu_user_manager"
+                android:onClick="onClick"
                 style="@style/MainMenuItemStyle">
 
                 <ImageView
@@ -72,6 +73,7 @@
 
             <LinearLayout
                 android:id="@+id/ll_menu_trade_info"
+                android:onClick="onClick"
                 style="@style/MainMenuItemStyle">
 
 
@@ -97,6 +99,7 @@
 
             <LinearLayout
                 android:id="@+id/ll_menu_data_analysis"
+                android:onClick="onClick"
                 style="@style/MainMenuItemStyle">
 
                 <ImageView
@@ -140,6 +143,7 @@
 
             <LinearLayout
                 android:id="@+id/ll_menu_exit"
+                android:onClick="onClick"
                 style="@style/MainMenuItemStyle">
 
                 <ImageView

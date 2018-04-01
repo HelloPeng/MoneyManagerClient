@@ -26,4 +26,10 @@
     <string name="main_menu_title_basic_manager">基础管理</string>
     <string name="main_menu_title_asset_analysis">资产分析</string>
     <string name="main_menu_title_system_manager">系统管理</string>
+    <string name="input_user_no">请输入要添加用户的编号</string>
+    <string name="input_user_name">请输入要添加用户姓名</string>
+    <string name="input_phone_num">请输入要添加用户手机号</string>
+    <string name="user_name">姓　名：</string>
+    <string name="user_no">编号：</string>
+    <string name="user_phone">手机号：</string>
 </resources>
