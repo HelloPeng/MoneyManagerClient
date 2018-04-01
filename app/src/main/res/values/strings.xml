@@ -1,0 +1,29 @@
+<resources>
+    <string name="app_name">家庭财务管理系统</string>
+    <string name="activity_name_login">登录</string>
+    <string name="activity_name_main">首页</string>
+    <string name="tv_show_password">密　码：</string>
+    <string name="tv_show_username">用户名：</string>
+    <string name="edit_hint_input_username">请输入用户名</string>
+    <string name="edit_hint_input_password">请输入密码</string>
+    <string name="edit_hint_input_password_again">请确认密码</string>
+    <string name="btn_show_login">登录</string>
+    <string name="btn_show_register">注册</string>
+    <string name="activity_name_register">注册</string>
+    <string name="input_password_difference">两次输入的密码不相符</string>
+    <string name="input_base_ip_hint">请输入服务器ip地址</string>
+    <string name="input_base_ip_hint_eg">服务器ip如:192.168.1.1</string>
+    <string name="confirm">确认</string>
+    <string name="cancel">取消</string>
+    <string name="dialog_title_config">初始化配置</string>
+    <string name="http_format">http://%s:7001</string>
+    <string name="not_found_ip_service">未找到指定ip下的服务器</string>
+    <string name="connect_sul">连接成功！</string>
+    <string name="main_menu_receipt_expenditure">收入/支出</string>
+    <string name="main_menu_item_data_analysis">数据分析</string>
+    <string name="main_menu_item_user_manager">成员管理</string>
+    <string name="main_menu_item_exit">退\u3000出</string>
+    <string name="main_menu_title_basic_manager">基础管理</string>
+    <string name="main_menu_title_asset_analysis">资产分析</string>
+    <string name="main_menu_title_system_manager">系统管理</string>
+</resources>
