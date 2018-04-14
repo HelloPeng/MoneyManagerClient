@@ -7,7 +7,7 @@ import android.databinding.ViewDataBinding;
  * 创建时间：08月30日
  * 时间：15:49
  * 版本：v1.0.0
- * 类描述：
+ * 类描述：普通对数据绑定Adapter
  * 修改时间：
  */
 

@@ -9,7 +9,7 @@ import android.view.View;
  * 创建时间：08月30日
  * 时间：15:40
  * 版本：v1.0.0
- * 类描述：
+ * 类描述：数据绑定的ViewHolder
  * 修改时间：
  */
 
