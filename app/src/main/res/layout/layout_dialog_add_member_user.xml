@@ -23,6 +23,7 @@
 
             <EditText
                 android:id="@+id/edit_no"
+                android:inputType="number"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:hint="@string/input_user_no" />
@@ -57,6 +58,7 @@
             android:id="@+id/edit_phone"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:maxLength="11"
             android:hint="@string/input_phone_num"
             android:inputType="phone" />
     </LinearLayout>

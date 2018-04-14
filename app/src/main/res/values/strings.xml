@@ -32,4 +32,9 @@
     <string name="user_name">姓　名：</string>
     <string name="user_no">编号：</string>
     <string name="user_phone">手机号：</string>
+    <string name="defray">支出</string>
+    <string name="income">收入</string>
+    <string name="activity_name_trade_info">收入/支出</string>
+    <string name="activity_name_user_manager">成员管理</string>
+    <string name="remarks">备\u3000\u3000注：</string>
 </resources>

@@ -32,12 +32,16 @@ public class RegisterActivity extends BaseActivity<ActivityRegisterBinding> {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        openBackIcon();
     }
 
     @Override
     protected int getLayoutId() {
         return R.layout.activity_register;
+    }
+
+    @Override
+    protected void initViews() {
+        openBackIcon();
     }
 
     public void onClick(View v) {

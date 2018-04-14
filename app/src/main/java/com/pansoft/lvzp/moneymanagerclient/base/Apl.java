@@ -6,6 +6,7 @@ import com.lcodecore.tkrefreshlayout.TwinklingRefreshLayout;
 import com.lcodecore.tkrefreshlayout.footer.BallPulseView;
 import com.lcodecore.tkrefreshlayout.header.progresslayout.ProgressLayout;
 import com.pansoft.lvzp.moneymanagerclient.R;
+import com.pansoft.lvzp.moneymanagerclient.http.OkHttpClientManager;
 
 /**
  * Created by lv_zhp on 2018/4/1.
@@ -23,6 +24,7 @@ public class Apl extends Application {
         sInstance = this;
         TwinklingRefreshLayout.setDefaultHeader(ProgressLayout.class.getName());
         TwinklingRefreshLayout.setDefaultFooter(BallPulseView.class.getName());
+        OkHttpClientManager.getInstance().init(this);
     }
 
     public static Apl getInstance() {

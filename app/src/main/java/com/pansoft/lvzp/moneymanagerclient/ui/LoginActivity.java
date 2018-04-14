@@ -36,11 +36,17 @@ public class LoginActivity extends BaseActivity<ActivityLoginBinding> {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+    }
+
+    @Override
+    protected void initViews() {
         ActionBar supportActionBar = getSupportActionBar();
         if (supportActionBar != null) {
             supportActionBar.setTitle(R.string.activity_name_login);
         }
-        buildConfigDialog();
+        String hostIp = Apl.getInstance().getBaseUrl();
+        if (hostIp.contains("null"))
+            buildConfigDialog();
     }
 
     private void buildConfigDialog() {
@@ -110,9 +116,10 @@ public class LoginActivity extends BaseActivity<ActivityLoginBinding> {
                 OkHttpClientManager.getInstance().asyncPost(ApiUrl.LOGIN, params, new OkHttpClientManager.HttpResultCallback<String>() {
                     @Override
                     public void onSuccess(String data) {
-                        SharedPreferencesUtils.setParam(mContext, Constant.USER_LOGIN_OID, data);
                         dismissProgressDialog();
                         showToast("登录成功");
+                        SharedPreferencesUtils.setParam(mContext, Constant.USER_LOGIN_OID, data);
+                        Apl.getInstance().setUserOid(data);
                         MainActivity.actionStart(mContext);
                         finish();
                     }

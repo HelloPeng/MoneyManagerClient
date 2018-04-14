@@ -7,6 +7,7 @@ import android.support.v4.util.ArrayMap;
 import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.View;
 
 import com.alibaba.fastjson.JSON;
@@ -43,14 +44,18 @@ public class UserManagerActivity
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        openBackIcon();
-        initRefreshLayout();
-        mDataBinding.refreshLayout.startRefresh();
     }
 
     @Override
     protected int getLayoutId() {
         return R.layout.activity_user_manager;
+    }
+
+    @Override
+    protected void initViews() {
+        openBackIcon();
+        initRefreshLayout();
+        mDataBinding.refreshLayout.startRefresh();
     }
 
     public void onClick(View v) {
@@ -66,31 +71,21 @@ public class UserManagerActivity
     public void onLoadPager(int pager) {
         Map<String, Object> params = new ArrayMap<>();
         params.put("parentOid", Apl.getInstance().getUserOid());
-        params.put("pager", pager);
+        params.put("page", pager);
         OkHttpClientManager.getInstance().asyncGetParams(ApiUrl.MEMBER_USER_LIST, params, new OkHttpClientManager.HttpResultCallback<List<MemberUserBean>>() {
             @Override
             public void onSuccess(final List<MemberUserBean> data) {
-                runOnUiThread(new Runnable() {
-                    @Override
-                    public void run() {
-                        List<MemberUserBean> fastList = JSON.parseArray(JSON.toJSONString(data), MemberUserBean.class);
-                        mAdapter.setupData(fastList);
-                        mAdapter.notifyDataSetChanged();
-                        mRefreshHelper.setupListData(fastList);
-                        mRefreshHelper.notifyRefreshFinish(fastList.size() < 10);
-                    }
-                });
+                List<MemberUserBean> fastList = JSON.parseArray(JSON.toJSONString(data), MemberUserBean.class);
+                mAdapter.setupData(fastList);
+                mAdapter.notifyDataSetChanged();
+                mRefreshHelper.setupListData(fastList);
+                mRefreshHelper.notifyRefreshFinish(fastList.size() < 10);
             }
 
             @Override
             public void onError(final String msg) {
-                runOnUiThread(new Runnable() {
-                    @Override
-                    public void run() {
-                        simpleError(msg);
-                        mRefreshHelper.notifyRefreshFinish(false);
-                    }
-                });
+                simpleError(msg);
+                mRefreshHelper.notifyRefreshFinish(false);
             }
         });
     }

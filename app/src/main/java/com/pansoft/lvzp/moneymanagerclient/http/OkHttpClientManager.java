@@ -1,5 +1,10 @@
 package com.pansoft.lvzp.moneymanagerclient.http;
 
+import android.content.Context;
+import android.os.Handler;
+import android.support.annotation.NonNull;
+import android.text.TextUtils;
+
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.TypeReference;
 import com.google.gson.Gson;
@@ -29,6 +34,7 @@ public class OkHttpClientManager {
     private static final int TIME_OUT = 10;
     private static final OkHttpClientManager INSTANCE = new OkHttpClientManager();
     private OkHttpClient mOkHttpClient;
+    private Handler mMainHandler;
 
     private OkHttpClientManager() {
         OkHttpClient.Builder builder = new OkHttpClient.Builder();
@@ -42,6 +48,10 @@ public class OkHttpClientManager {
         return INSTANCE;
     }
 
+    public void init(Context context) {
+        mMainHandler = new Handler(context.getMainLooper());
+    }
+
     public <T> void asyncGetParams(String url, Map<String, Object> params, HttpResultCallback<T> callback) {
         url += getGetParams(params);
         asyncGet(url, callback);
@@ -53,49 +63,57 @@ public class OkHttpClientManager {
                 .url(Apl.getInstance().getBaseUrl() + url)
                 .get()
                 .build();
-        mOkHttpClient.newCall(request).enqueue(new Callback() {
-            @Override
-            public void onFailure(Call call, IOException e) {
-                callback.onError(e.getMessage());
-            }
-
-            @Override
-            public void onResponse(Call call, Response response) throws IOException {
-                buildResultBean(response, callback);
-            }
-        });
+        mOkHttpClient.newCall(request).enqueue(new SimpleCall<>(callback));
     }
 
     public <T> void asyncPostJson(String url, Object jsonBean, final HttpResultCallback<T> callback) {
         RequestBody requestBody = RequestBody.create(MediaType.parse("JSON"), JSON.toJSONString(jsonBean));
         Request request = getRequest(url, requestBody);
-        mOkHttpClient.newCall(request).enqueue(new Callback() {
-            @Override
-            public void onFailure(Call call, IOException e) {
-                callback.onError(e.getMessage());
-            }
-
-            @Override
-            public void onResponse(Call call, Response response) throws IOException {
-                buildResultBean(response, callback);
-            }
-        });
+        mOkHttpClient.newCall(request).enqueue(new SimpleCall<>(callback));
     }
 
     public <T> void asyncPost(String url, Map<String, Object> params, final HttpResultCallback<T> callback) {
         FormBody.Builder formBuilder = _getFormBuilder(params);
         Request request = getRequest(url, formBuilder.build());
-        mOkHttpClient.newCall(request).enqueue(new Callback() {
-            @Override
-            public void onFailure(Call call, IOException e) {
-                callback.onError(e.getMessage());
-            }
+        mOkHttpClient.newCall(request).enqueue(new SimpleCall<>(callback));
+    }
 
-            @Override
-            public void onResponse(Call call, Response response) throws IOException {
-                buildResultBean(response, callback);
+    private class SimpleCall<T> implements Callback {
+
+        private HttpResultCallback<T> mCallback;
+
+        SimpleCall(HttpResultCallback<T> callback) {
+            mCallback = callback;
+        }
+
+        @Override
+        public void onFailure(@NonNull Call call, @NonNull final IOException e) {
+            mMainHandler.post(new Runnable() {
+                @Override
+                public void run() {
+                    mCallback.onError(e.getMessage());
+                }
+            });
+        }
+
+        @Override
+        public void onResponse(@NonNull Call call, @NonNull final Response response) throws IOException {
+            String resultJson = null;
+            if (response.body() != null) {
+                resultJson = response.body().string();
             }
-        });
+            final String fResultJson = resultJson;
+            mMainHandler.post(new Runnable() {
+                @Override
+                public void run() {
+                    try {
+                        buildResultBean(fResultJson, mCallback);
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                }
+            });
+        }
     }
 
     private Request getRequest(String url, RequestBody requestBody) {
@@ -105,16 +123,21 @@ public class OkHttpClientManager {
                 .build();
     }
 
-    private <T> void buildResultBean(Response response, HttpResultCallback<T> callback) throws IOException {
-        if (response.body() != null) {
-            String resultJson = response.body().string();
-            Gson gson = new Gson();
+    private <T> void buildResultBean(String resultJson, HttpResultCallback<T> callback) throws IOException {
+        if (TextUtils.isEmpty(resultJson)) {
+            callback.onError("数据获取异常");
+            return;
+        }
+        Gson gson = new Gson();
+        try {
             HttpResult<T> resultBean = gson.fromJson(resultJson, new TypeToken<HttpResult<T>>() {
             }.getType());
             if (resultBean.getStatus() == 200)
                 callback.onSuccess(resultBean.getData());
             else
                 callback.onError(resultBean.getMessage());
+        }catch (Exception e){
+            callback.onError("数据解析异常");
         }
     }
 

@@ -35,12 +35,18 @@ public class MainActivity extends BaseActivity<ActivityMainBinding> {
         return R.layout.activity_main;
     }
 
+    @Override
+    protected void initViews() {
+
+    }
+
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.ll_menu_user_manager:
                 UserManagerActivity.actionStart(mContext);
                 break;
             case R.id.ll_menu_trade_info:
+                TradeInfoActivity.actionStart(mContext);
                 break;
             case R.id.ll_menu_data_analysis:
                 break;

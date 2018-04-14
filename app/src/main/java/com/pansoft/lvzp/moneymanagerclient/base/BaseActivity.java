@@ -27,6 +27,8 @@ public abstract class BaseActivity<D extends ViewDataBinding> extends AppCompatA
 
     protected abstract int getLayoutId();
 
+    protected abstract void initViews();
+
     protected D mDataBinding;
 
     private ProgressDialog mProgressDialog;
@@ -37,6 +39,7 @@ public abstract class BaseActivity<D extends ViewDataBinding> extends AppCompatA
         super.onCreate(savedInstanceState);
         mContext = this;
         mDataBinding = DataBindingUtil.setContentView(this, getLayoutId());
+        initViews();
     }
 
     public void openBackIcon(){
