@@ -45,6 +45,7 @@ public class EditAndDetailPropertyActivity
     private DatePickerDialog mDatePickerDialog;
     private TradeItemBean mTradeBean;
     private ArrayMap<String, String> mMemberUser;
+    private boolean isSelectOther;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -79,8 +80,10 @@ public class EditAndDetailPropertyActivity
     @Override
     public void onCheckedChanged(RadioGroup group, int checkedId) {
         if (checkedId == R.id.rdoBtn_other) {
+            isSelectOther = true;
             mDataBinding.editInputOther.setVisibility(View.VISIBLE);
         } else {
+            isSelectOther = false;
             mDataBinding.editInputOther.setVisibility(View.INVISIBLE);
         }
     }
@@ -88,6 +91,9 @@ public class EditAndDetailPropertyActivity
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.btn_submit:
+                if (isSelectOther) {
+                    mTradeBean.setConsumeTag(mDataBinding.editInputOther.getText().toString());
+                }
                 break;
             case R.id.ll_select_date:
                 mDatePickerDialog.show();
