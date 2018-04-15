@@ -1,56 +1,90 @@
 <?xml version="1.0" encoding="utf-8"?>
-<layout xmlns:android="http://schemas.android.com/apk/res/android">
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <data>
 
+        <variable
+            name="tradeInfoBean"
+            type="com.pansoft.lvzp.moneymanagerclient.bean.TradeItemBean" />
     </data>
 
-    <LinearLayout
+    <android.support.v7.widget.CardView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:gravity="center_vertical"
-        android:orientation="vertical"
-        android:background="@color/colorWhite"
-        android:padding="15dp">
+        android:layout_marginBottom="4dp"
+        android:layout_marginLeft="8dp"
+        android:layout_marginRight="8dp"
+        android:layout_marginTop="4dp"
+        app:cardCornerRadius="8dp"
+        app:cardElevation="8dp">
 
-        <LinearLayout
+        <com.mcxtzhang.swipemenulib.SwipeMenuLayout
+            android:id="@+id/swipe_layout"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:gravity="center_vertical"
-            android:orientation="horizontal">
+            android:layout_height="wrap_content">
 
-            <TextView
-                android:layout_width="wrap_content"
+            <LinearLayout
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="王小二"
-                android:textSize="17sp" />
+                android:background="@color/colorWhite"
+                android:gravity="center_vertical"
+                android:orientation="vertical"
+                android:padding="15dp">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center_vertical"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@{tradeInfoBean.userName}"
+                        android:textSize="17sp" />
 
 
-            <TextView
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:gravity="end"
-                android:text="+1324.13"
-                android:textSize="20sp"
-                android:textStyle="bold" />
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:gravity="end"
+                        android:text='@{(tradeInfoBean.type == 1 ? "+ ":"- " )+ tradeInfoBean.money}'
+                        android:textColor="@{tradeInfoBean.type == 1 ?@color/colorIncome:@color/colorDefray }"
+                        android:textSize="20sp"
+                        android:textStyle="bold" />
 
-        </LinearLayout>
+                </LinearLayout>
 
 
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textSize="13sp"
-            android:layout_marginTop="5dp"
-            android:layout_marginBottom="5dp"
-            android:text="[理财]"
-            android:textColor="@android:color/black" />
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="5dp"
+                    android:layout_marginTop="5dp"
+                    android:text='@{"["+tradeInfoBean.consumeTag+"]"}'
+                    android:textColor="@android:color/black"
+                    android:textSize="13sp" />
 
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="2018-12-11"
-            android:textSize="13sp" />
-    </LinearLayout>
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@{tradeInfoBean.date}"
+                    android:textSize="13sp" />
+            </LinearLayout>
+
+
+            <Button
+                android:id="@+id/btnDelete"
+                android:layout_width="60dp"
+                android:layout_height="match_parent"
+                android:background="#fa7171"
+                android:text="删除"
+                android:textColor="@android:color/white" />
+
+        </com.mcxtzhang.swipemenulib.SwipeMenuLayout>
+
+    </android.support.v7.widget.CardView>
+
 </layout>

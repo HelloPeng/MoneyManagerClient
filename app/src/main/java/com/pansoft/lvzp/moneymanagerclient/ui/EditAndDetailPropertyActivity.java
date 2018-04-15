@@ -1,13 +1,13 @@
 package com.pansoft.lvzp.moneymanagerclient.ui;
 
+import android.annotation.SuppressLint;
+import android.app.Activity;
 import android.app.DatePickerDialog;
-import android.content.Context;
 import android.content.Intent;
-import android.support.v4.util.ArrayMap;
 import android.os.Bundle;
+import android.support.v4.util.ArrayMap;
 import android.text.InputFilter;
 import android.text.TextUtils;
-import android.util.Log;
 import android.view.View;
 import android.widget.DatePicker;
 import android.widget.RadioGroup;
@@ -41,12 +41,18 @@ public class EditAndDetailPropertyActivity
         implements RadioGroup.OnCheckedChangeListener {
 
 
-    public static void actionStart(Context context) {
+    /**
+     * @param context
+     * @param isIncome 是否为收入
+     */
+    public static void actionStart(Activity activity, boolean isIncome, int requestCode) {
         Intent intent = new Intent();
-        intent.setClass(context, EditAndDetailPropertyActivity.class);
-        context.startActivity(intent);
+        intent.setClass(activity, EditAndDetailPropertyActivity.class);
+        intent.putExtra("is_income", isIncome);
+        activity.startActivityForResult(intent, requestCode);
     }
 
+    private boolean isIncome;
     private DatePickerDialog mDatePickerDialog;
     private TradeItemBean mTradeBean;
     private ArrayMap<String, String> mMemberUser;
@@ -64,15 +70,18 @@ public class EditAndDetailPropertyActivity
 
     @Override
     protected void initViews() {
+        isIncome = getIntent().getBooleanExtra("is_income", false);
+        mDataBinding.setIsIncome(isIncome);
         openBackIcon();
         mDataBinding.rdoGroupIncomeTag.setOnCheckedChangeListener(this);
+        mDataBinding.rdoGroupDefrayTag.setOnCheckedChangeListener(this);
         mDataBinding.editInputMoney.setFilters(new InputFilter[]{new CashierInputFilter()});
         Calendar calendar = Calendar.getInstance();
         mDatePickerDialog = new DatePickerDialog(mContext,
                 new DatePickerDialog.OnDateSetListener() {
                     @Override
                     public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
-                        String date = year + "-" + (month + 1) + "-" + dayOfMonth;
+                        String date = year + "-" + format(String.valueOf(month + 1)) + "-" + String.valueOf(dayOfMonth);
                         getTradeBean().setDate(date);
                         mDataBinding.tvSelectDate.setText(date);
                     }
@@ -84,37 +93,46 @@ public class EditAndDetailPropertyActivity
 
     @Override
     public void onCheckedChanged(RadioGroup group, int checkedId) {
-        if (checkedId == R.id.rdoBtn_other) {
+        if (checkedId == R.id.rdoBtn_income_other || checkedId == R.id.rdoBtn_defray_other) {
             isSelectOther = true;
             mDataBinding.editInputOther.setVisibility(View.VISIBLE);
             EditTextUtils.reqsetGetFocus(mDataBinding.editInputOther);
         } else {
             TextView childView = findViewById(checkedId);
-            mTradeBean.setConsumeTag(childView.getText().toString());
+            getTradeBean().setConsumeTag(childView.getText().toString());
             isSelectOther = false;
             mDataBinding.editInputOther.setVisibility(View.INVISIBLE);
         }
     }
 
+    @SuppressLint("DefaultLocale")
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.btn_submit:
                 if (isSelectOther) {
                     if (TextUtils.isEmpty(mDataBinding.editInputOther.getText())) {
-                        showToast("请填写收入来源的详细信息");
+                        showToast("请填写其他类型的详细信息");
                         return;
                     }
                     mTradeBean.setConsumeTag(mDataBinding.editInputOther.getText().toString());
                 }
                 if (TextUtils.isEmpty(mDataBinding.editInputMoney.getText())) {
-                    showToast("请填写您的收入金额");
+                    showToast("请填写具体的金额");
                     return;
                 }
-                mTradeBean.setMoney(mDataBinding.editInputMoney.getText().toString());
+                String money = mDataBinding.editInputMoney.getText().toString();
+                mTradeBean.setMoney(String.format("%.2f", Float.parseFloat(money)));
                 if (!TextUtils.isEmpty(mDataBinding.editInputRemarks.getText())) {
                     mTradeBean.setRemarks(mDataBinding.editInputRemarks.getText().toString());
                 }
-                mTradeBean.setType(1);
+                String userOid = (String) SharedPreferencesUtils.getParam(mContext, Constant.USER_LOGIN_OID, "");
+                mTradeBean.setParentOid(userOid);
+                if (isIncome) {
+                    mTradeBean.setType(1);
+                } else {
+                    mTradeBean.setType(0);
+                }
+
                 updateTradeInfo();
                 break;
             case R.id.ll_select_date:
@@ -155,18 +173,17 @@ public class EditAndDetailPropertyActivity
 
     private void updateTradeInfo() {
         showProgressDialog();
-        String userOid = (String) SharedPreferencesUtils.getParam(mContext, Constant.USER_LOGIN_OID, "");
-        mTradeBean.setParentOid(userOid);
         OkHttpClientManager.
                 getInstance().
                 asyncPostJson(
-                        ApiUrl.ADD_INCOME_RECORD,
-                        JSON.toJSONString(mTradeBean),
+                        ApiUrl.ADD_TRADE_RECORD,
+                        mTradeBean,
                         new OkHttpClientManager.HttpResultCallback<Boolean>() {
                             @Override
                             public void onSuccess(Boolean data) {
                                 dismissProgressDialog();
                                 if (data) {
+                                    setResult(RESULT_OK);
                                     finish();
                                 }
                             }
@@ -176,6 +193,13 @@ public class EditAndDetailPropertyActivity
                                 simpleError(msg);
                             }
                         });
+    }
+
+    private String format(String data) {
+        if (data.length() == 1) {
+            data = "0" + data;
+        }
+        return data;
     }
 
     /**

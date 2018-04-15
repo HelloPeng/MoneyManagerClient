@@ -6,4 +6,7 @@
     <color name="colorWindowBackground">#eeeeee</color>
     <color name="colorWhite">#FFFFFF</color>
     <color name="colorBlack">#000000</color>
+
+    <color name="colorIncome">#61cc40</color>
+    <color name="colorDefray">#d95656</color>
 </resources>

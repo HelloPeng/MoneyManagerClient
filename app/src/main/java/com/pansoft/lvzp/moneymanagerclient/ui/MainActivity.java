@@ -3,9 +3,8 @@ package com.pansoft.lvzp.moneymanagerclient.ui;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.support.v7.app.AlertDialog;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.app.AlertDialog;
 import android.view.View;
 
 import com.pansoft.lvzp.moneymanagerclient.Constant;
@@ -49,6 +48,7 @@ public class MainActivity extends BaseActivity<ActivityMainBinding> {
                 TradeInfoActivity.actionStart(mContext);
                 break;
             case R.id.ll_menu_data_analysis:
+                DataAnalysisActivity.actionStart(mContext);
                 break;
             case R.id.ll_menu_exit:
                 new AlertDialog.Builder(mContext)

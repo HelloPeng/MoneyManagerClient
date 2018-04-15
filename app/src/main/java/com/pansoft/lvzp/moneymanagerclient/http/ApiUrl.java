@@ -16,5 +16,11 @@ public interface ApiUrl {
     //获取成员用户列表
     String MEMBER_USER_LIST = "/api/user/member/list";
     //交易信息添加的接口
-    String ADD_INCOME_RECORD = "/api/trade/add";
+    String ADD_TRADE_RECORD = "/api/trade/add";
+    //获取成员用户列表
+    String TRADE_INFO_LIST = "/api/trade/list";
+    //删除交易信息
+    String DEL_TRADE_TRADE = "/api/trade/del";
+    //获取指定月份的资产分析
+    String TRADE_ANALYSIS_MONTH = "/api/trade/analysis";
 }

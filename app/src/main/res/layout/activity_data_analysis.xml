@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:line="http://schemas.android.com/apk/res-auto">
+
+    <data>
+
+    </data>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+
+        <RadioGroup
+            android:id="@+id/rdoGroup_date"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="5dp"
+            android:layout_marginTop="5dp"
+            android:gravity="center_vertical"
+            android:orientation="horizontal">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_margin="15dp"
+                android:text="图表范围："
+                android:textColor="@android:color/black" />
+
+            <RadioButton
+                android:id="@+id/rdoBtn_three"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:checked="true"
+                android:text="3个月内" />
+
+            <RadioButton
+                android:id="@+id/rdoBtn_six"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="6个月内" />
+
+            <RadioButton
+                android:id="@+id/rdoBtn_year"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="1年以内" />
+        </RadioGroup>
+
+
+        <RadioGroup
+            android:id="@+id/rdoGroup_type"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center_vertical"
+            android:orientation="horizontal">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_margin="15dp"
+                android:text="图标类型："
+                android:textColor="@android:color/black" />
+
+            <RadioButton
+                android:id="@+id/rdoBtn_income"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:checked="true"
+                android:text="@string/income" />
+
+            <RadioButton
+                android:id="@+id/rdoBtn_defray"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/defray" />
+        </RadioGroup>
+
+        <tech.linjiang.suitlines.SuitLines
+            android:id="@+id/suitlines"
+            android:layout_width="match_parent"
+            android:layout_height="200dp"
+            android:background="#dfdede"
+            line:lineType="curve" />
+    </LinearLayout>
+</layout>

@@ -4,6 +4,8 @@
 
     <data>
 
+        <import type="android.view.View" />
+
         <variable
             name="isIncome"
             type="Boolean" />
@@ -68,7 +70,7 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="@{inCome? @string/income_date : @string/defray_date}" />
+                        android:text="@{isIncome? @string/income_date : @string/defray_date}" />
 
                     <LinearLayout
                         android:id="@+id/ll_select_date"
@@ -105,13 +107,14 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="收入来源：" />
+                        android:text="@{isIncome?@string/income_source:@string/defray_purpose}" />
 
                     <RadioGroup
-                        android:id="@+id/rdoGroup_defray"
+                        android:id="@+id/rdoGroup_defray_tag"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:orientation="horizontal">
+                        android:orientation="horizontal"
+                        android:visibility="@{isIncome?View.GONE:View.VISIBLE}">
 
                         <RadioButton
                             android:layout_width="wrap_content"
@@ -124,6 +127,7 @@
                             android:text="生活日用" />
 
                         <RadioButton
+                            android:id="@+id/rdoBtn_defray_other"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:text="其他" />
@@ -136,7 +140,7 @@
                         android:orientation="horizontal"
                         android:paddingLeft="5dp"
                         android:paddingRight="5dp"
-                        android:visibility="gone">
+                        android:visibility="@{isIncome?View.VISIBLE:View.GONE}">
 
                         <RadioButton
                             android:id="@+id/rdoBtn_wages"
@@ -151,7 +155,7 @@
                             android:text="奖金" />
 
                         <RadioButton
-                            android:id="@+id/rdoBtn_other"
+                            android:id="@+id/rdoBtn_income_other"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:text="其他" />
@@ -166,7 +170,7 @@
                         android:layout_weight="1"
                         android:singleLine="true"
                         android:textSize="14sp"
-                        android:visibility="visible" />
+                        android:visibility="invisible" />
 
                 </LinearLayout>
 
@@ -221,6 +225,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="30dp"
+            android:onClick="onClick"
             android:text="提交" />
 
     </LinearLayout>

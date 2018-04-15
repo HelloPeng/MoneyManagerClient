@@ -52,7 +52,7 @@ public class TkRefreshHelper<T> extends RefreshListenerAdapter {
                 mPager = 1;
                 if (mListData != null)
                     mListData.clear();
-                mOnLoadPagerListener.onLoadPager(mPager);
+                mOnLoadPagerListener.onLoadPage(mPager);
             }
         }, 400);
     }
@@ -69,7 +69,7 @@ public class TkRefreshHelper<T> extends RefreshListenerAdapter {
                     return;
                 }
                 mPager++;
-                mOnLoadPagerListener.onLoadPager(mPager);
+                mOnLoadPagerListener.onLoadPage(mPager);
             }
         }, 400);
     }
@@ -90,9 +90,9 @@ public class TkRefreshHelper<T> extends RefreshListenerAdapter {
         /**
          * 当加载页码适合的回调
          *
-         * @param pager
+         * @param page
          */
-        void onLoadPager(int pager);
+        void onLoadPage(int page);
     }
 
 }

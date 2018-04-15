@@ -4,13 +4,31 @@ package com.pansoft.lvzp.moneymanagerclient.bean;
  * Created by lv_zhp on 2018/4/6.
  */
 public class TradeItemBean {
+    private String oid;
     private String parentOid;
+    private String userName;//成员用户的名字
     private String userOid;//成员用户对oid
     private int type;//0是支出 1是收入
     private String date;//时间
     private String consumeTag;//消费的Tag
     private String remarks;//备注信息
     private String money;//金额
+
+    public String getOid() {
+        return oid;
+    }
+
+    public void setOid(String oid) {
+        this.oid = oid;
+    }
+
+    public String getUserName() {
+        return userName;
+    }
+
+    public void setUserName(String userName) {
+        this.userName = userName;
+    }
 
     public String getParentOid() {
         return parentOid;

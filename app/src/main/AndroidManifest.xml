@@ -3,6 +3,7 @@
     package="com.pansoft.lvzp.moneymanagerclient">
 
     <uses-permission android:name="android.permission.INTERNET" />
+
     <application
         android:name=".base.Apl"
         android:allowBackup="true"
@@ -30,7 +31,8 @@
         <activity
             android:name=".ui.TradeInfoActivity"
             android:label="@string/activity_name_trade_info" />
-        <activity android:name=".ui.EditAndDetailPropertyActivity"></activity>
+        <activity android:name=".ui.EditAndDetailPropertyActivity" />
+        <activity android:name=".ui.DataAnalysisActivity"></activity>
     </application>
 
 </manifest>

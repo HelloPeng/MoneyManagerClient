@@ -7,7 +7,6 @@ import android.support.v4.util.ArrayMap;
 import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
 import android.text.TextUtils;
-import android.util.Log;
 import android.view.View;
 
 import com.alibaba.fastjson.JSON;
@@ -48,7 +47,7 @@ public class UserManagerActivity
 
     @Override
     protected int getLayoutId() {
-        return R.layout.activity_user_manager;
+        return  R.layout.activity_user_manager;
     }
 
     @Override
@@ -68,10 +67,11 @@ public class UserManagerActivity
     }
 
     @Override
-    public void onLoadPager(int pager) {
+    public void onLoadPage(int page) {
         Map<String, Object> params = new ArrayMap<>();
         params.put("parentOid", Apl.getInstance().getUserOid());
-        params.put("page", pager);
+        params.put("page", page);
+        params.put("pageNum",10);
         OkHttpClientManager.getInstance().asyncGetParams(ApiUrl.MEMBER_USER_LIST, params, new OkHttpClientManager.HttpResultCallback<List<MemberUserBean>>() {
             @Override
             public void onSuccess(final List<MemberUserBean> data) {

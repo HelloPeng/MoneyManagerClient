@@ -6,13 +6,11 @@ import android.support.annotation.NonNull;
 import android.text.TextUtils;
 
 import com.alibaba.fastjson.JSON;
-import com.alibaba.fastjson.TypeReference;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import com.pansoft.lvzp.moneymanagerclient.base.Apl;
 
 import java.io.IOException;
-import java.lang.reflect.Type;
 import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.TimeUnit;
@@ -108,7 +106,7 @@ public class OkHttpClientManager {
                 public void run() {
                     try {
                         buildResultBean(fResultJson, mCallback);
-                    } catch (IOException e) {
+                    } catch (Exception e) {
                         e.printStackTrace();
                     }
                 }
@@ -123,7 +121,7 @@ public class OkHttpClientManager {
                 .build();
     }
 
-    private <T> void buildResultBean(String resultJson, HttpResultCallback<T> callback) throws IOException {
+    private <T> void buildResultBean(String resultJson, HttpResultCallback<T> callback) {
         if (TextUtils.isEmpty(resultJson)) {
             callback.onError("数据获取异常");
             return;
@@ -136,7 +134,7 @@ public class OkHttpClientManager {
                 callback.onSuccess(resultBean.getData());
             else
                 callback.onError(resultBean.getMessage());
-        }catch (Exception e){
+        } catch (Exception e) {
             callback.onError("数据解析异常");
         }
     }
