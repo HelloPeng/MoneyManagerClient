@@ -15,5 +15,6 @@ public interface ApiUrl {
     String ADD_MEMBER_USER = "/api/user/member/add";
     //获取成员用户列表
     String MEMBER_USER_LIST = "/api/user/member/list";
-
+    //交易信息添加的接口
+    String ADD_INCOME_RECORD = "/api/trade/add";
 }

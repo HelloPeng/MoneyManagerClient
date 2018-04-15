@@ -37,4 +37,8 @@
     <string name="activity_name_trade_info">收入/支出</string>
     <string name="activity_name_user_manager">成员管理</string>
     <string name="remarks">备\u3000\u3000注：</string>
+    <string name="earner">收 入 者：</string>
+    <string name="spenders">支 出 者：</string>
+    <string name="income_date">收入日期</string>
+    <string name="defray_date">支出日期</string>
 </resources>

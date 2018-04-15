@@ -6,14 +6,17 @@ import android.content.Intent;
 import android.support.v4.util.ArrayMap;
 import android.os.Bundle;
 import android.text.InputFilter;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
 import android.widget.DatePicker;
 import android.widget.RadioGroup;
+import android.widget.TextView;
 
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.alibaba.fastjson.JSON;
 import com.pansoft.lvzp.moneymanagerclient.CashierInputFilter;
+import com.pansoft.lvzp.moneymanagerclient.Constant;
 import com.pansoft.lvzp.moneymanagerclient.R;
 import com.pansoft.lvzp.moneymanagerclient.base.Apl;
 import com.pansoft.lvzp.moneymanagerclient.base.BaseActivity;
@@ -22,6 +25,8 @@ import com.pansoft.lvzp.moneymanagerclient.bean.TradeItemBean;
 import com.pansoft.lvzp.moneymanagerclient.databinding.ActivityEditAndDetailPropertyBinding;
 import com.pansoft.lvzp.moneymanagerclient.http.ApiUrl;
 import com.pansoft.lvzp.moneymanagerclient.http.OkHttpClientManager;
+import com.pansoft.lvzp.moneymanagerclient.utils.EditTextUtils;
+import com.pansoft.lvzp.moneymanagerclient.utils.SharedPreferencesUtils;
 
 import java.util.Calendar;
 import java.util.List;
@@ -60,7 +65,7 @@ public class EditAndDetailPropertyActivity
     @Override
     protected void initViews() {
         openBackIcon();
-        mDataBinding.rdoGroupConsumeTag.setOnCheckedChangeListener(this);
+        mDataBinding.rdoGroupIncomeTag.setOnCheckedChangeListener(this);
         mDataBinding.editInputMoney.setFilters(new InputFilter[]{new CashierInputFilter()});
         Calendar calendar = Calendar.getInstance();
         mDatePickerDialog = new DatePickerDialog(mContext,
@@ -82,7 +87,10 @@ public class EditAndDetailPropertyActivity
         if (checkedId == R.id.rdoBtn_other) {
             isSelectOther = true;
             mDataBinding.editInputOther.setVisibility(View.VISIBLE);
+            EditTextUtils.reqsetGetFocus(mDataBinding.editInputOther);
         } else {
+            TextView childView = findViewById(checkedId);
+            mTradeBean.setConsumeTag(childView.getText().toString());
             isSelectOther = false;
             mDataBinding.editInputOther.setVisibility(View.INVISIBLE);
         }
@@ -92,10 +100,31 @@ public class EditAndDetailPropertyActivity
         switch (v.getId()) {
             case R.id.btn_submit:
                 if (isSelectOther) {
+                    if (TextUtils.isEmpty(mDataBinding.editInputOther.getText())) {
+                        showToast("请填写收入来源的详细信息");
+                        return;
+                    }
                     mTradeBean.setConsumeTag(mDataBinding.editInputOther.getText().toString());
                 }
+                if (TextUtils.isEmpty(mDataBinding.editInputMoney.getText())) {
+                    showToast("请填写您的收入金额");
+                    return;
+                }
+                mTradeBean.setMoney(mDataBinding.editInputMoney.getText().toString());
+                if (!TextUtils.isEmpty(mDataBinding.editInputRemarks.getText())) {
+                    mTradeBean.setRemarks(mDataBinding.editInputRemarks.getText().toString());
+                }
+                mTradeBean.setType(1);
+                updateTradeInfo();
                 break;
             case R.id.ll_select_date:
+                /*Calendar calendar = Calendar.getInstance();
+                mDatePickerDialog.
+                        getDatePicker().
+                        updateDate(
+                                calendar.get(Calendar.YEAR),
+                                calendar.get(Calendar.MONTH),
+                                calendar.get(Calendar.DAY_OF_MONTH));*/
                 mDatePickerDialog.show();
                 break;
             case R.id.ll_select_user_name:
@@ -124,6 +153,31 @@ public class EditAndDetailPropertyActivity
         }
     }
 
+    private void updateTradeInfo() {
+        showProgressDialog();
+        String userOid = (String) SharedPreferencesUtils.getParam(mContext, Constant.USER_LOGIN_OID, "");
+        mTradeBean.setParentOid(userOid);
+        OkHttpClientManager.
+                getInstance().
+                asyncPostJson(
+                        ApiUrl.ADD_INCOME_RECORD,
+                        JSON.toJSONString(mTradeBean),
+                        new OkHttpClientManager.HttpResultCallback<Boolean>() {
+                            @Override
+                            public void onSuccess(Boolean data) {
+                                dismissProgressDialog();
+                                if (data) {
+                                    finish();
+                                }
+                            }
+
+                            @Override
+                            public void onError(String msg) {
+                                simpleError(msg);
+                            }
+                        });
+    }
+
     /**
      * 显示成员用户选择框
      */
@@ -135,6 +189,9 @@ public class EditAndDetailPropertyActivity
                 .itemsCallbackSingleChoice(-1, new MaterialDialog.ListCallbackSingleChoice() {
                     @Override
                     public boolean onSelection(MaterialDialog dialog, View itemView, int which, CharSequence text) {
+                        if (which < 0) {
+                            return false;
+                        }
                         mDataBinding.tvSelectName.setText(text);
                         getTradeBean().setUserOid(mMemberUser.get(text));
                         return true;
