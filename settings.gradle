@@ -1,1 +1,1 @@
-include ':app',":suitlines"
+include ':app'

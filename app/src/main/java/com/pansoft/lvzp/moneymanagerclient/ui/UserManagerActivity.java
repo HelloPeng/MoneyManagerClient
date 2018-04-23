@@ -22,6 +22,7 @@ import com.pansoft.lvzp.moneymanagerclient.http.ApiUrl;
 import com.pansoft.lvzp.moneymanagerclient.http.OkHttpClientManager;
 import com.pansoft.lvzp.moneymanagerclient.widget.AddMemberUserDialog;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
@@ -36,6 +37,7 @@ public class UserManagerActivity
         context.startActivity(intent);
     }
 
+    private List<MemberUserBean> mListData = new ArrayList<>();
     private TkRefreshHelper<MemberUserBean> mRefreshHelper;
     private SimpleBindingAdapter<MemberUserBean> mAdapter;
     private AddMemberUserDialog mAddMemberUserDialog;
@@ -47,7 +49,7 @@ public class UserManagerActivity
 
     @Override
     protected int getLayoutId() {
-        return  R.layout.activity_user_manager;
+        return R.layout.activity_user_manager;
     }
 
     @Override
@@ -71,14 +73,15 @@ public class UserManagerActivity
         Map<String, Object> params = new ArrayMap<>();
         params.put("parentOid", Apl.getInstance().getUserOid());
         params.put("page", page);
-        params.put("pageNum",10);
+        params.put("pageNum", 10);
         OkHttpClientManager.getInstance().asyncGetParams(ApiUrl.MEMBER_USER_LIST, params, new OkHttpClientManager.HttpResultCallback<List<MemberUserBean>>() {
             @Override
             public void onSuccess(final List<MemberUserBean> data) {
                 List<MemberUserBean> fastList = JSON.parseArray(JSON.toJSONString(data), MemberUserBean.class);
-                mAdapter.setupData(fastList);
+                mListData.addAll(fastList);
+                mAdapter.setupData(mListData);
                 mAdapter.notifyDataSetChanged();
-                mRefreshHelper.setupListData(fastList);
+                mRefreshHelper.setupListData(mListData);
                 mRefreshHelper.notifyRefreshFinish(fastList.size() < 10);
             }
 

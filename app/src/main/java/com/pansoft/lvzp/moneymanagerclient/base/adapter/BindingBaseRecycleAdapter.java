@@ -77,9 +77,7 @@ public abstract class BindingBaseRecycleAdapter<T, D extends ViewDataBinding> ex
     public List<T> getListData() {
         if (mListData == null || mListData.isEmpty())
             return null;
-        List<T> list = new ArrayList<>();
-        list.addAll(mListData);
-        return list;
+        return new ArrayList<>(mListData);
     }
 
     public void setOnItemCLickListener(OnItemClickListener lickListener) {
@@ -98,7 +96,7 @@ public abstract class BindingBaseRecycleAdapter<T, D extends ViewDataBinding> ex
     }
 
     public T getItem(int position) {
-        if (position>=mListData.size())
+        if (position >= mListData.size())
             return null;
         return mListData == null ? null : mListData.get(position);
     }

@@ -25,12 +25,14 @@ import com.pansoft.lvzp.moneymanagerclient.databinding.ItemLayoutTradeInfoBindin
 import com.pansoft.lvzp.moneymanagerclient.http.ApiUrl;
 import com.pansoft.lvzp.moneymanagerclient.http.OkHttpClientManager;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
 public class TradeInfoActivity
         extends BaseActivity<ActivityTradeInfoBinding>
         implements TkRefreshHelper.OnLoadPagerListener {
+
 
     public static void actionStart(Context context) {
         Intent intent = new Intent();
@@ -40,6 +42,8 @@ public class TradeInfoActivity
 
     private SimpleBindingAdapter<TradeItemBean> mAdapter;
     private TkRefreshHelper<TradeItemBean> mTkRefreshHelper;
+    private List<TradeItemBean> mListData = new ArrayList<>();
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -128,9 +132,10 @@ public class TradeInfoActivity
             @Override
             public void onSuccess(final List<TradeItemBean> data) {
                 List<TradeItemBean> itemBeans = JSON.parseArray(JSON.toJSONString(data), TradeItemBean.class);
-                mAdapter.setupData(itemBeans);
+                mListData.addAll(itemBeans);
+                mAdapter.setupData(mListData);
                 mAdapter.notifyDataSetChanged();
-                mTkRefreshHelper.setupListData(itemBeans);
+                mTkRefreshHelper.setupListData(mListData);
                 mTkRefreshHelper.notifyRefreshFinish(itemBeans.size() < 10);
             }
 
